@@ -21,7 +21,7 @@ def encode_message(data, message):
 
     for i in range(len(data)):
         if message_idx < len(binary_message):  # Ensure we don't exceed the message length
-            data[i] = (data[i] & 0b11111110) | int(binary_message[message_idx])
+            data[i] = (data[i] and 0b11111110) | int(binary_message[message_idx])
             message_idx += 1
         else:
             break  # Exit loop when the entire message is encoded
@@ -40,9 +40,43 @@ def decode_message(data):
 
     return ''.join(chars) #Combines all characters into a single string and returns it
 
+def main(): #Starts an infinite loop for the main menu
+    while True:
+        print("1. Encode a secret message") #Display option 1
+        print("2. Decode a secret message") #Display option 2
+        print("3. Exit") #Display option 3 
+        choice = input("Enter your choice: ") 
 
+        if choice == "1": #If the user chooses to input message 
+            input_image = input("Enter the path to the input BMP image: ") #Input path for BMP image
+            output_image = input("Enter the path to the output BMP image: ") #Output path for BMP image 
+            message = input("Enter the message to hide: ") #Secret message to encode
 
+            try:
+                header, data = read_bmp(input_image) #Read the bmp file and extract the header and data
+                modified_data = encode_message(data, message) #Encode the secret message into the pixel data
+                write_bmp(output_image, header, modified_data) #Saves the new data to a bmp file
+                print("Message encoded and saved to", output_image) #Confirming encoding success
+            except Exception as e: #Assigns error as "e"
+                print("Error:", e) #Prints the type of error
 
+        elif choice == "2": #User decides to decode the secret message
+            input_image = input("Enter the path to the BMP image: ") #Enter the output path for the bmp image
 
+            try:
+                _, data = read_bmp(input_image) #Reads the bmp file and extracts the pixel dats with the message
+                message = decode_message(data) #Decodes the message from the data 
+                print("Decoded message:", message) #Prints the secret message
+            except Exception as e: #Sets any errors as "e"
+                print("Error:", e) #Displays the error message
+        elif choice == "3": #User decides to exit the program
+            print("Exiting the program.") #Alerts user
+            break #Exists the program
 
+        else: #If the user inputs anything other than "1" "2" "3"
+            print("Invalid choice. Please try again.") #Notifies the user
 
+if __name__ == "__main__": #Entry point of the script
+    main() #Calls the main function to start the program
+
+    
