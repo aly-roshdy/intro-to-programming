@@ -40,8 +40,8 @@ def decode_message(data):
 
     return ''.join(chars) #Combines all characters into a single string and returns it
 
-def main(): #Starts an infinite loop for the main menu
-    while True:
+def main(): 
+    while True: #Starts an infinite loop for the main menu
         print("1. Encode a secret message") #Display option 1
         print("2. Decode a secret message") #Display option 2
         print("3. Exit") #Display option 3 
@@ -52,7 +52,7 @@ def main(): #Starts an infinite loop for the main menu
             output_image = input("Enter the path to the output BMP image: ") #Output path for BMP image 
             message = input("Enter the message to hide: ") #Secret message to encode
 
-            try:
+            try: 
                 header, data = read_bmp(input_image) #Read the bmp file and extract the header and data
                 modified_data = encode_message(data, message) #Encode the secret message into the pixel data
                 write_bmp(output_image, header, modified_data) #Saves the new data to a bmp file
